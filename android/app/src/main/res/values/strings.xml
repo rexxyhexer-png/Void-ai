@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">VOID AI</string>
+    <string name="composer_hint">Ask VOID AI...</string>
+    <string name="listening_text">Listening (Hindi / Hinglish / English)...</string>
+    <string name="speaking_text">Speaking response...</string>
+    <string name="permission_mic_rationale">VOID AI requires audio recording permission to recognize speech. Audio is processed solely for current session dictation.</string>
+    <string name="settings_title">Provider &amp; Security</string>
+    <string name="confirm_action_title">Confirm Action Execution</string>
+    <string name="short_mode_desc">1-4 concise lines (Default)</string>
+    <string name="normal_mode_desc">Everyday practical conversations</string>
+    <string name="accessibility_service_description">VOID AI Accessibility Automation performs gestures such as reel scrolling, screen lock, and hands-free mobile navigation.</string>
+</resources>

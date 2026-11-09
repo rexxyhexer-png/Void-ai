@@ -1,0 +1,6 @@
+{
+  "name": "Void AI",
+  "description": "Native Android AI client & workspace featuring monochrome aesthetics, BYOK providers, Keystore encryption, voice interaction, and scoped Android actions.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

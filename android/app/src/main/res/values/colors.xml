@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="void_black">#050505</color>
+    <color name="void_card">#111111</color>
+    <color name="void_border">#2C2C2C</color>
+    <color name="void_white">#F7F7F7</color>
+    <color name="void_muted">#8E8E93</color>
+    <color name="void_accent">#FFFFFF</color>
+</resources>
