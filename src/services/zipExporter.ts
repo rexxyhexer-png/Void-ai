@@ -35,6 +35,18 @@ rootProject.name = "VoidAI"
 include(":app")`
   },
   {
+    path: 'gradle/libs.versions.toml',
+    category: 'gradle',
+    content: `[versions]
+agp = "8.7.0"
+kotlin = "1.9.24"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }`
+  },
+  {
     path: 'build.gradle.kts',
     category: 'gradle',
     content: `plugins {
