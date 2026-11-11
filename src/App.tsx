@@ -12,6 +12,8 @@ import { PROVIDER_CONFIGS, ProviderClient } from './services/providers';
 import { ActionService } from './services/actions';
 import { encryptAndSaveKey, getDecryptedKey, hasSavedKey, removeKey, removeAllKeys } from './utils/crypto';
 import { voiceManager } from './utils/voice';
+import { downloadDebugApk } from './services/zipExporter';
+import { Package } from 'lucide-react';
 
 export default function App() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -330,6 +332,28 @@ export default function App() {
           setMessages([]);
         }}
       />
+
+      {/* Direct APK Download Banner */}
+      <div className="w-full max-w-4xl mx-auto px-4 pt-1 pb-1">
+        <div className="bg-gradient-to-r from-zinc-900 via-zinc-950 to-zinc-900 border border-zinc-800 rounded-xl p-3 flex items-center justify-between gap-3 shadow-lg">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-white text-black shrink-0">
+              <Package className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-white block">Direct Android APK Download (app-debug.apk)</span>
+              <span className="text-[11px] text-zinc-400 block">No GitHub 404 errors — download the compiled debug APK directly instantly!</span>
+            </div>
+          </div>
+          <button
+            onClick={() => downloadDebugApk()}
+            className="py-1.5 px-3.5 rounded-lg bg-white text-black hover:bg-zinc-200 text-xs font-bold transition-all shrink-0 cursor-pointer shadow-sm active:scale-95 flex items-center gap-1.5"
+          >
+            <Package className="w-3.5 h-3.5" />
+            <span>Download APK</span>
+          </button>
+        </div>
+      </div>
 
       {/* Floating Notification Toast */}
       {errorNotification && (
