@@ -1,0 +1,60 @@
+name: Publish Prebuilt APK to GitHub Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'apk-distribution/app-debug.apk'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate APK and Checksum
+        run: |
+          echo "Checking APK and checksum..."
+          test -f apk-distribution/app-debug.apk || { echo "APK missing"; exit 1; }
+          test -s apk-distribution/app-debug.apk || { echo "APK is empty"; exit 1; }
+          test -f apk-distribution/app-debug.apk.sha256 || { echo "Checksum file missing"; exit 1; }
+          
+          # Verify checksum
+          cd apk-distribution
+          sha256sum -c app-debug.apk.sha256 || { echo "Checksum verification failed"; exit 1; }
+          
+          # Verify ZIP archive structure
+          unzip -tq app-debug.apk || { echo "Invalid APK ZIP archive"; exit 1; }
+          cd ..
+          echo "APK validation passed successfully."
+
+      - name: Create GitHub Release and Upload APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RUN_NUM="${{ github.run_number }}"
+          RUN_ATTEMPT="${{ github.run_attempt }}"
+          TAG="debug-apk-build-${RUN_NUM}-${RUN_ATTEMPT}"
+          TITLE="Debug APK Build #${RUN_NUM}"
+          
+          echo "Creating GitHub Release with tag: $TAG"
+          
+          gh release create "$TAG" \
+            --title "$TITLE" \
+            --latest \
+            --notes "Automatically published debug APK build from GitHub Actions.
+            - Run Number: ${RUN_NUM}
+            - Run Attempt: ${RUN_ATTEMPT}
+            - Commit SHA: ${{ github.sha }}
+            - Purpose: Testing and verification
+            - Signed with temporary debug keystore." \
+            apk-distribution/app-debug.apk
+            
+          echo "Release published successfully!"
