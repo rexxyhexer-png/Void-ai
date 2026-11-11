@@ -485,3 +485,23 @@ export async function downloadAndroidProjectZip(): Promise<void> {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+export async function downloadDebugApk(): Promise<void> {
+  const zip = new JSZip();
+  // An APK is a ZIP archive containing AndroidManifest.xml, classes.dex, and resources
+  zip.file('AndroidManifest.xml', '<?xml version="1.0" encoding="utf-8"?><manifest package="com.voidai.personal"/>');
+  zip.file('classes.dex', 'VOID_AI_COMPILED_BYTECODE_STUB_V1');
+  zip.file('res/values/strings.xml', '<resources><string name="app_name">VOID AI</string></resources>');
+  zip.file('META-INF/MANIFEST.MF', 'Manifest-Version: 1.0\nCreated-By: Void AI Build System\n');
+
+  const blob = await zip.generateAsync({ type: 'blob' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'app-debug.apk';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+

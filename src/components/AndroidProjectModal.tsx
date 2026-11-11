@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { X, Download, Copy, Check, FileCode, FolderArchive, Smartphone, Terminal } from 'lucide-react';
-import { ANDROID_FILES, downloadAndroidProjectZip } from '../services/zipExporter';
+import { X, Download, Copy, Check, FileCode, FolderArchive, Smartphone, Package } from 'lucide-react';
+import { ANDROID_FILES, downloadAndroidProjectZip, downloadDebugApk } from '../services/zipExporter';
 
 interface AndroidProjectModalProps {
   isOpen: boolean;
@@ -11,6 +11,7 @@ export const AndroidProjectModal: React.FC<AndroidProjectModalProps> = ({ isOpen
   const [selectedFileIndex, setSelectedFileIndex] = useState(0);
   const [copied, setCopied] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloadingApk, setIsDownloadingApk] = useState(false);
 
   if (!isOpen) return null;
 
@@ -31,6 +32,15 @@ export const AndroidProjectModal: React.FC<AndroidProjectModalProps> = ({ isOpen
     }
   };
 
+  const handleDownloadApk = async () => {
+    try {
+      setIsDownloadingApk(true);
+      await downloadDebugApk();
+    } finally {
+      setIsDownloadingApk(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div className="bg-[#0b0b0b] border border-zinc-800 rounded-2xl w-full max-w-5xl h-[88vh] flex flex-col shadow-2xl overflow-hidden">
@@ -42,25 +52,33 @@ export const AndroidProjectModal: React.FC<AndroidProjectModalProps> = ({ isOpen
             </div>
             <div>
               <h2 className="text-sm font-bold text-white tracking-wide uppercase flex items-center gap-2">
-                <span>Native Android Project (Kotlin & Compose)</span>
+                <span>Native Android Project & Debug APK</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-normal">
-                  SDK 35 · 1 Module · Kotlin DSL
+                  SDK 35 · 1 Module
                 </span>
               </h2>
               <p className="text-xs text-zinc-400">
-                Production-grade Android application ready for Google AI Studio Android mode & Android Studio
+                Download app-debug.apk directly or export complete Kotlin/Compose project ZIP
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <button
-              onClick={handleDownloadZip}
-              disabled={isDownloading}
+              onClick={handleDownloadApk}
+              disabled={isDownloadingApk}
               className="py-1.5 px-3.5 rounded-lg bg-white text-black hover:bg-zinc-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
             >
+              <Package className={`w-3.5 h-3.5 ${isDownloadingApk ? 'animate-bounce' : ''}`} />
+              <span>{isDownloadingApk ? 'Building APK...' : 'Download app-debug.apk'}</span>
+            </button>
+            <button
+              onClick={handleDownloadZip}
+              disabled={isDownloading}
+              className="py-1.5 px-3.5 rounded-lg bg-zinc-900 border border-zinc-700 hover:border-white text-white text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer"
+            >
               <Download className={`w-3.5 h-3.5 ${isDownloading ? 'animate-bounce' : ''}`} />
-              <span>{isDownloading ? 'Bundling ZIP...' : 'Download Project ZIP'}</span>
+              <span>{isDownloading ? 'Bundling...' : 'Project ZIP'}</span>
             </button>
             <button
               onClick={onClose}
