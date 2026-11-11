@@ -38,10 +38,11 @@ jobs:
             -dname "CN=Android Debug,O=Android,C=US"
           ls -l debug.keystore
 
-      - name: Build Debug APK with Gradle
+      - name: Generate Gradle Wrapper & Build APK
         run: |
           cd android
-          gradle :app:assembleDebug --stacktrace --no-daemon
+          gradle wrapper --gradle-version 8.8
+          ./gradlew :app:assembleDebug --stacktrace --no-daemon
 
       - name: Verify APK Output
         run: |
